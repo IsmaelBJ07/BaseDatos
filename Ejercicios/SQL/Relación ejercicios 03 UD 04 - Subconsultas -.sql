@@ -100,3 +100,19 @@ WHERE altura >
 )
 
 
+--Ejercicio15
+SELECT jugador.nombre AS nombre, equipo.nombre AS equipo, ejt_cp.temporada 
+FROM estadistica_jugador_temporada ejt_cp
+INNER JOIN jugador_equipo ON jugador_equipo.codigo_jugador = ejt_cp.id_jugador 
+	AND jugador_equipo.codigo_equipo = ejt_cp.id_equipo 
+	AND jugador_equipo.temporada = ejt_cp.temporada
+INNER JOIN jugador ON jugador.codigo = jugador_equipo.codigo_jugador
+INNER JOIN equipo ON equipo.codigo = jugador_equipo.codigo_equipo
+WHERE ejt_cp.promedio_puntos_partido_temporada >
+	(
+	SELECT AVG(promedio_puntos_partido_temporada)
+	FROM estadistica_jugador_temporada
+	WHERE estadistica_jugador_temporada.temporada = ejt_cp.temporada
+		AND estadistica_jugador_temporada.id_equipo = ejt_cp.id_equipo
+	);
+
